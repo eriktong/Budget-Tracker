@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            background: url('https://your-link-to-dragon-background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            text-align: center;
+            font-size: 40px;
+            color: #FF4500;  /* Dragon fire color */
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 12px 0 5px;
+            font-weight: bold;
+            color: #f0f0f0;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background-color: #222;
+            color: #f0f0f0;
+        }
+        input:focus, select:focus {
+            border-color: #FF4500;
+            outline: none;
+        }
+        button {
+            padding: 12px 25px;
+            background-color: #FF4500;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #dc3522;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th, .table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .table th {
+            background-color: #FF4500;
+            color: white;
+        }
+        .table td {
+            background-color: #333;
+        }
+        .table tr:nth-child(even) td {
+            background-color: #444;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .actions button {
+            width: 48%;
+        }
+        .summary {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .summary strong {
+            color: #FF4500;
+        }
+        .healthy-status {
+            font-size: 20px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .healthy {
+            background-color: #28a745;
+            color: white;
+        }
+        .warning {
+            background-color: #ffc107;
+            color: black;
+        }
+        .danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .advice {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #f0f0f0;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 6px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 30px;
+            }
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            input, select, button {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .actions button {
+                width: 48%;
+            }
+            .summary {
+                font-size: 16px;
+            }
+            .table th, .table td {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            input, select, button {
+                font-size: 12px;
+                padding: 8px;
+            }
+            .table th, .table td {
+                font-size: 12px;
+                padding: 6px;
+            }
+            .actions button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .summary {
+                font-size: 14px;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.1/dist/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Budget Tracker</h1>
+
+        <form id="transactionForm">
+            <label for="description">Description</label>
+            <input type="text" id="description" placeholder="e.g., Grocery, Rent">
+
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" placeholder="e.g., 500">
+
+            <label for="category">Category</label>
+            <select id="category">
+                <option value="Income">Income</option>
+                <option value="Bills">Bills</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Savings">Savings</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Health">Health</option>
+                <option value="Education">Education</option>
+                <option value="Debt">Debt</option>
+                <option value="Gifts/Donations">Gifts/Donations</option>
+                <option value="Insurance">Insurance</option>
+                <option value="Investments">Investments</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+
+            <label for="date">Date</label>
+            <input type="date" id="date">
+
+            <label for="receipt">Upload Receipt (Image/PDF)</label>
+            <input type="file" id="receipt" accept="image/*,application/pdf" onchange="extractReceiptDetails(event)">
+
+            <button type="submit">Add Transaction</button>
+        </form>
+
+        <h2>Transaction History</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTableBody"></tbody>
+        </table>
+
+        <div class="summary">
+            <p><strong>Total Income:</strong> <span id="totalIncome">0</span></p>
+            <p><strong>Total Expenses:</strong> <span id="totalExpenses">0</span></p>
+            <p><strong>Balance:</strong> <span id="balance">0</span></p>
+        </div>
+
+        <div class="healthy-status" id="healthyStatus"></div>
+        <div class="advice" id="budgetAdvice"></div>
+
+        <div class="actions">
+            <button id="downloadExcel">Download as Excel</button>
+            <button id="print">Print</button>
+        </div>
+    </div>
+
+    <script>
+        const transactionForm = document.getElementById('transactionForm');
+        const transactionTableBody = document.getElementById('transactionTableBody');
+        const totalIncomeEl = document.getElementById('totalIncome');
+        const totalExpensesEl = document.getElementById('totalExpenses');
+        const balanceEl = document.getElementById('balance');
+        const healthyStatus = document.getElementById('healthyStatus');
+        const budgetAdvice = document.getElementById('budgetAdvice');
+        const downloadExcelBtn = document.getElementById('downloadExcel');
+        const printBtn = document.getElementById('print');
+
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+        function updateSummary() {
+            const totalIncome = transactions
+                .filter(t => t.category === 'Income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const totalExpenses = transactions
+                .filter(t => t.category !== 'Income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = totalIncome - totalExpenses;
+
+            totalIncomeEl.textContent = totalIncome;
+            totalExpensesEl.textContent = totalExpenses;
+            balanceEl.textContent = balance;
+
+            updateHealthyStatus(balance);
+        }
+
+        function updateHealthyStatus(balance) {
+            if (balance >= 0) {
+                healthyStatus.textContent = 'Your budget is healthy!';
+                healthyStatus.className = 'healthy';
+                budgetAdvice.textContent = 'Keep it up! Stay on track with your savings goals!';
+            } else if (balance < 0 && balance >= -500) {
+                healthyStatus.textContent = 'You are in the yellow zone!';
+                healthyStatus.className = 'warning';
+                budgetAdvice.textContent = 'Be careful, try reducing some expenses or increase your income.';
+            } else {
+                healthyStatus.textContent = 'Your budget is in danger!';
+                healthyStatus.className = 'danger';
+                budgetAdvice.textContent = 'You need to cut back on some spending and save more!';
+            }
+        }
+
+        function renderTransactions() {
+            transactionTableBody.innerHTML = '';
+            transactions.forEach((transaction, index) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${transaction.description}</td>
+                    <td>${transaction.category}</td>
+                    <td>${transaction.amount}</td>
+                    <td>${transaction.date}</td>
+                    <td><button onclick="deleteTransaction(${index})">Delete</button></td>
+                `;
+                transactionTableBody.appendChild(row);
+            });
+
+            updateSummary();
+        }
+
+        function deleteTransaction(index) {
+            transactions.splice(index, 1);
+            renderTransactions();
+        }
+
+        transactionForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const category = document.getElementById('category').value;
+            const date = document.getElementById('date').value;
+
+            if (description && !isNaN(amount) && date) {
+                transactions.push({ description, amount, category, date });
+                renderTransactions();
+
+                transactionForm.reset();
+            } else {
+                alert('Please provide valid inputs!');
+            }
+        });
+
+        downloadExcelBtn.addEventListener('click', () => {
+            const ws = XLSX.utils.json_to_sheet(transactions);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Transactions");
+            XLSX.writeFile(wb, 'budget_data.xlsx');
+        });
+
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        function extractReceiptDetails(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileType = file.type;
+                if (fileType.startsWith('image/')) {
+                    processImage(file);
+                } else if (fileType === 'application/pdf') {
+                    processPDF(file);
+                } else {
+                    alert('Please upload a valid image or PDF file.');
+                }
+            }
+        }
+
+        function processImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    Tesseract.recognize(
+                        img,
+                        'eng',
+                        {
+                            logger: m => console.log(m)
+                        }
+                    ).then(({ data: { text } }) => {
+                        console.log('Extracted Text:', text);
+
+                        const lines = text.split('\n');
+                        document.getElementById('description').value = lines[0] || '';
+                        document.getElementById('amount').value = parseFloat(lines[1]) || '';
+                        document.getElementById('category').value = lines[2] || 'Miscellaneous';
+                    });
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function processPDF(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const loadingTask = pdfjsLib.getDocument({ data: e.target.result });
+                loadingTask.promise.then(function(pdf) {
+                    console.log('PDF loaded');
+                    pdf.getPage(1).then(function(page) {
+                        console.log('Page loaded');
+                        const scale = 1.5;
+                        const viewport = page.getViewport({ scale: scale });
+
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        page.render({
+                            canvasContext: context,
+                            viewport: viewport
+                        }).promise.then(function() {
+                            const textContent = page.getTextContent();
+                            textContent.then(function(text) {
+                                let extractedText = '';
+                                text.items.forEach(function(item) {
+                                    extractedText += item.str + ' ';
+                                });
+
+                                console.log('Extracted PDF Text:', extractedText);
+
+                                const lines = extractedText.split('\n');
+                                document.getElementById('description').value = lines[0] || '';
+                                document.getElementById('amount').value = parseFloat(lines[1]) || '';
+                                document.getElementById('category').value = lines[2] || 'Miscellaneous';
+                            });
+                        });
+                    });
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        renderTransactions();
+    </script>
+</body>
+</html>
