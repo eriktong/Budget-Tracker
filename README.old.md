@@ -1,62 +1,106 @@
 # Budget-Tracker
-This is a simple budget tracker application built using HTML, CSS, and JavaScript. It allows users to track their income, expenses, and overall financial health. The application enables users to input and manage their transactions, upload receipts (images or PDFs), and view a summary of their financial status.
-Features
 
-    Transaction Management: Add, view, and delete transactions with details like description, amount, category, and date.
-    Receipt Upload: Upload receipts in image or PDF format and extract transaction details using OCR (Tesseract.js).
-    Financial Summary: Displays total income, total expenses, and balance.
-    Budget Health Status: Provides visual feedback on your budget’s health (healthy, warning, or in danger).
-    Download and Print: Option to download the transaction data as an Excel file or print the current view.
+![Pages Deploy](https://github.com/eriktong/Budget-Tracker/actions/workflows/pages.yml/badge.svg) ![Last commit](https://img.shields.io/github/last-commit/eriktong/Budget-Tracker) ![License](https://img.shields.io/badge/license-MIT-informational)
 
-Technologies Used
+**Live Demo:** [https://eriktong.github.io/Budget-Tracker/](https://eriktong.github.io/Budget-Tracker/)
 
-    HTML5: For structure and layout.
-    CSS3: For styling and responsiveness.
-    JavaScript: For interactivity and logic (using libraries like Tesseract.js, pdf.js, and xlsx.js).
-    Tesseract.js: For Optical Character Recognition (OCR) to extract text from images and PDFs.
-    pdf.js: For processing PDF files and extracting text.
-    XLSX.js: For exporting transaction data as an Excel file.
+> Short description: _Update this one-liner to summarize the app in a sentence._
 
-Setup
+---
 
-    Clone the repository to your local machine:
+## Features
+- Clean starter with Static HTML/CSS/JS
+- Deployed on **GitHub Pages** via Actions
+- Production build output: `.`
+- Mobile-friendly layout _(if applicable)_
+- Routing-ready _(SPA)_  
 
-    git clone https://github.com/yourusername/budget-tracker.git
 
-    Open the index.html file in your preferred browser to run the application.
+---
 
-Usage
+## Quick Start
 
-    Add Transaction: Fill in the form with the description, amount, category, and date of the transaction.
-    Upload Receipt: Upload an image or PDF receipt to automatically fill in the transaction details using OCR.
-    Transaction History: View the list of transactions and delete any unwanted records.
-    Download as Excel: Click the "Download as Excel" button to export your transaction data.
-    Print: Use the "Print" button to print the transaction summary.
+### Prerequisites
+- Node.js LTS (or none if pure static)
+- npm (bundled with Node)
 
-File Upload
+### Local Dev
+```bash
+# install
+npm install
 
-    The app supports file uploads for receipts in image (JPEG, PNG, etc.) or PDF format. The text from these files will be automatically extracted and populated in the form.
+# start dev server
+npx serve .
+```
 
-Budget Health
+### Build
+```bash
+(none)
+```
 
-    Healthy Budget: If your balance is positive, the app will show a green message encouraging you to keep up the good work.
-    Warning Zone: If your balance is negative but within an acceptable range, a yellow warning will be shown, advising you to adjust your spending or increase income.
-    Danger Zone: If your balance is deeply negative, a red danger message will alert you to reduce spending.
+> Build output goes to **`.`**.
 
-Example of Usage
-Adding a Transaction:
+---
 
-    Description: "Grocery"
-    Amount: 500
-    Category: "Groceries"
-    Date: 2024-12-19
+## Deploy (GitHub Pages)
 
-Budget Health Status:
+This repo deploys using **Actions** on pushes to `main`.
 
-    Total Income: 2000
-    Total Expenses: 1500
-    Balance: 500 (Healthy)
+- Workflow: `.github/workflows/pages.yml`  
+- Public URL: **https://eriktong.github.io/Budget-Tracker/**  
+- SPA fallback: `404.html` is created during the workflow so React Router routes work on refresh.
 
-Contributions
+If something breaks:
+1. Verify the latest workflow run is green.
+2. For CRA, ensure `"homepage": "https://eriktong.github.io/Budget-Tracker/"` exists in `package.json`.
+3. For Vite, ensure `base: "/Budget-Tracker/"` in `vite.config.*`.
 
-Feel free to fork the repository and submit pull requests if you have improvements or fixes in mind.
+---
+
+## Screenshots
+
+> Put images under `docs/` and reference them here.
+
+| Screen | Image |
+|---|---|
+| Home | ![Home](docs/screenshot-1.png) |
+
+---
+
+## Tech Stack
+- Static HTML/CSS/JS
+- HTML, CSS, JavaScript
+- GitHub Actions + GitHub Pages
+
+---
+
+## Project Structure (high level)
+
+
+---
+
+## Environment Variables
+> If none, delete this section. Otherwise, document them like:
+
+| Variable | Example | Required | Description |
+|---|---|---|---|
+| `VITE_API_URL` | `https://api.example.com` | No | API base URL |
+
+---
+
+## Roadmap / TODO
+- [ ] Add better screenshots
+- [ ] Fill in real description & features
+- [ ] Audit Lighthouse (performance, a11y, SEO)
+- [ ] Add tests (Vitest/Jest) _(optional)_
+- [ ] Add CI for lint/test _(optional)_
+
+---
+
+## License
+This project is licensed under the **MIT License**. See [LICENSE](LICENSE).
+
+---
+
+## Maintainer
+- **Erik Tong** — feedback & issues via GitHub
