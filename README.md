@@ -1,8 +1,9 @@
 # Budget-Tracker
 
+**Live Demo:** https://eriktong.github.io/Budget-Tracker/
+
 ![Pages Deploy](https://github.com/eriktong/Budget-Tracker/actions/workflows/pages.yml/badge.svg) ![Last commit](https://img.shields.io/github/last-commit/eriktong/Budget-Tracker) 
 
-**Live Demo:** [https://eriktong.github.io/Budget-Tracker/](https://eriktong.github.io/Budget-Tracker/)
 
 > Track income & expenses by category; summary totals.
 
